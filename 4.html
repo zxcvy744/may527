@@ -1,9 +1,9 @@
-<html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>카운트다운 타이머</title>
+    <title>타이머 제어</title>
     <style>
         #timer {
             font-size: 50px;
@@ -11,16 +11,55 @@
             text-align: center;
             margin-top: 100px;
         }
+        #controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <div id="timer">00:00</div>
+    <div id="timer">05:00</div>
+    <div id="controls">
+        <button id="startButton">시작</button>
+        <button id="stopButton">멈추기</button>
+    </div>
 
     <script>
-        // 타이머 설정 (예: 5분)
         let timeInSeconds = 300;
+        let timerInterval;
 
-        // 타이머 업데이트 함수
-        function upd
-            </html>
+        function updateTimer() {
+            let minutes = Math.floor(timeInSeconds / 60);
+            let seconds = timeInSeconds % 60;
+            document.getElementById("timer").innerText = 
+                (minutes < 10 ? "0" + minutes : minutes) + ":" + 
+                (seconds < 10 ? "0" + seconds : seconds);
+
+            if (timeInSeconds > 0) {
+                timeInSeconds--;
+            } else {
+                clearInterval(timerInterval);
+                alert("타이머가 종료되었습니다!");
+            }
+        }
+
+        document.getElementById("startButton").addEventListener("click", function() {
+            if (!timerInterval) {
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+        });
+
+        document.getElementById("stopButton").addEventListener("click", function() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        });
+    </script>
+
+</body>
+</html>
