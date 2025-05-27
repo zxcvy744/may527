@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>타이머 제어</title>
+    <title>자동 사진 변경</title>
     <style>
-        #timer {
-            font-size: 50px;
-            font-weight: bold;
+        #imageContainer {
             text-align: center;
-            margin-top: 100px;
+            margin-top: 50px;
         }
         #controls {
             text-align: center;
@@ -19,47 +17,52 @@
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            margin: 5px;
+        }
+        img {
+            max-width: 100%;
+            max-height: 500px;
         }
     </style>
 </head>
 <body>
 
-    <div id="timer">05:00</div>
+    <h1>자동으로 사진 바뀌는 기능</h1>
+    <div id="imageContainer">
+        <img id="currentImage" src="20.png" alt="첫 번째 이미지">
+    </div>
+
     <div id="controls">
-        <button id="startButton">시작</button>
-        <button id="stopButton">멈추기</button>
+        <button id="startButton">사진 시작</button>
+        <button id="stopButton">사진 멈추기</button>
     </div>
 
     <script>
-        let timeInSeconds = 300;
-        let timerInterval;
+        // 사진 목록 (여러 이미지 파일을 배열로 저장)
+        const images = ['20.png', '21.png', '22.png']; // 원하는 이미지 경로로 바꾸세요
+        let currentIndex = 0; // 현재 표시된 이미지의 인덱스
+        let interval; // 사진 변경을 위한 인터벌 변수
 
-        function updateTimer() {
-            let minutes = Math.floor(timeInSeconds / 60);
-            let seconds = timeInSeconds % 60;
-            document.getElementById("timer").innerText = 
-                (minutes < 10 ? "0" + minutes : minutes) + ":" + 
-                (seconds < 10 ? "0" + seconds : seconds);
-
-            if (timeInSeconds > 0) {
-                timeInSeconds--;
-            } else {
-                clearInterval(timerInterval);
-                alert("타이머가 종료되었습니다!");
-            }
+        // 사진 변경 함수
+        function changeImage() {
+            currentIndex = (currentIndex + 1) % images.length; // 이미지 배열 순환
+            document.getElementById('currentImage').src = images[currentIndex]; // 이미지 변경
         }
 
-        document.getElementById("startButton").addEventListener("click", function() {
-            if (!timerInterval) {
-                timerInterval = setInterval(updateTimer, 1000);
+        // 시작 버튼 클릭 시: 사진 자동 변경 시작
+        document.getElementById('startButton').addEventListener('click', function() {
+            if (!interval) { // 이미 실행 중이 아니면
+                interval = setInterval(changeImage, 3000); // 3초마다 changeImage 호출
             }
         });
 
-        document.getElementById("stopButton").addEventListener("click", function() {
-            clearInterval(timerInterval);
-            timerInterval = null;
+        // 멈춤 버튼 클릭 시: 사진 자동 변경 멈춤
+        document.getElementById('stopButton').addEventListener('click', function() {
+            clearInterval(interval); // 자동 변경 중지
+            interval = null; // 인터벌 초기화
         });
     </script>
 
 </body>
 </html>
+
